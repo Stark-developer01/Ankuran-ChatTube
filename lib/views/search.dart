@@ -1,4 +1,5 @@
 import 'package:chatting_app/helper/constants.dart';
+import 'package:chatting_app/helper/helperfunctions.dart';
 import 'package:chatting_app/services/database.dart';
 import 'package:chatting_app/views/conversation_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,6 +10,8 @@ class SearchScreen extends StatefulWidget {
   @override
   _SearchScreenState createState() => _SearchScreenState();
 }
+
+String _myName;
 
 class _SearchScreenState extends State<SearchScreen> {
   DatabaseMethods databaseMethods = new DatabaseMethods();
@@ -59,8 +62,10 @@ class _SearchScreenState extends State<SearchScreen> {
         "chatRoomId": chatRoomId,
       };
       DatabaseMethods().createChatRoom(chatRoomId, chatRoomMap);
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => ConversationScreen()));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ConversationScreen(chatRoomId)));
     } else {
       print("You Cannot Send Message to Yourself");
     }
@@ -111,6 +116,12 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   void initState() {
     super.initState();
+  }
+
+  getUserInfo() async {
+    _myName = await HelperFunctions.getUserNameSharedPreference();
+    setState(() {});
+    print("${_myName}");
   }
 
   @override
